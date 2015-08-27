@@ -32,8 +32,8 @@ In conclusion, ObjectId are quite safe on very [very] large application.
 So, because your application are more prone to have more node.js processes than DB processes, we can understand why mongoose disable the **forceServerObjectId** parameter by default.
 
 However, if you’re still reading this tutorial, maybe you really want to force your database to create _ids. If, it’s the case, let me introduce you to the joy of changing the behavior of libraries.
-
-## Step 1.1: changing the mon’
+##Step 1: Mongoose
+### Step 1.1: changing the mon’
 Logically, you already have installed mongoose with *npm* or any other procedure. 
 
 First, you need to set the **forceServerObjectId** property to true. 
@@ -45,7 +45,7 @@ and set **o.db.forceServerObjectId** to **true**
 > - "Can I use {_id:false} in my Schema now ?" 
 > - "Not, yet… you need to remove some stuff"
 
-## step 1.2:changing the  ‘goose
+### step 1.2:changing the  ‘goose
 
 Now, we need to change all save/create queries to avoid the default creation of _ids.
 Edit the **lib/model.js** file to remove this portion of code in the **$__handleSave function**:
