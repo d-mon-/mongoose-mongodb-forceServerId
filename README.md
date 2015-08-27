@@ -81,8 +81,9 @@ You’ll need to edit the following files in **mongoose/node_module/mongodb/lib/
 
 you can help yourself with the [issue ticket](https://jira.mongodb.org/browse/NODE-543) to find the correct line number.
 
-In *collection.js*:
-In **insertMany** function:
+####In *collection.js*:
+#####In **insertMany** function:
+modify the condition as follows
 ```js
 // Do we want to force the server to assign the _id key
 if(self.s.db.options.forceServerObjectId!==true) {
@@ -92,7 +93,8 @@ if(self.s.db.options.forceServerObjectId!==true) {
   }
 }
 ```
-In **insertDocuments** function:
+####In **insertDocuments** function:
+add the condition before the for loop.
 ```js
 // Add _id if not specified
 if( self.s.db.options.forceServerObjectId!==true) {
@@ -104,7 +106,7 @@ if( self.s.db.options.forceServerObjectId!==true) {
 
 ### Step 2.2 BULK! SMACH!
 
-Every time you see this line in **bulk/ordered.js** and **bulk/unordered.js**: 
+Every time you see this line in **bulk/ordered.js** and **bulk/unordered.js** (or find any new ObjectId() call): 
 ```js
 if(document._id == null) document._id = new ObjectID();
 ```
@@ -112,6 +114,7 @@ replace it with:
 ```js
 if( this.s.collection.s.db.options.forceServerObjectId!==true &&  document._id == null) document._id = new ObjectID();
 ```
+
 
 And, you can FINALLY store documents without _id with mongoose by using the parameter **{_id:false}** when you design your schema !
 
