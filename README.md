@@ -1,7 +1,8 @@
 # Let mongoose support forceServerObjectId 
 ###### (and the little bug in the driver)
 **Author:** *Guérin Olivier*
-no source in this repo
+
+*no source in this repo*
 ## Introduction:
 Hello, 
 I’m *Olivier* and today I’ll present you a short step by step tutorial to let mongoose insert documents in a mongo database without any _id.
@@ -132,5 +133,5 @@ var ObjectId =  mongoose.Types.ObjectId;
 var x = new ObjectId(); //return a new ObjectId()
 ```
 
-Enjoy! ;)
+Enjoy! :wink:
 
