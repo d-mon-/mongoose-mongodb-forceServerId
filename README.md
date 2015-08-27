@@ -36,7 +36,7 @@ Logically, you already have installed mongoose with *npm* or any other procedure
 
 First, you need to set the **forceServerObjectId** property to true. 
 
-To do so, you need to edit in *node_module* the file **/mongoose/lib/drivers/node-module-native/coonection.js** 
+To do so, you need to edit in *node_module* the file **/mongoose/lib/drivers/node-module-native/connection.js** 
 
 and set **o.db.forceServerObjectId** to **true**
 
