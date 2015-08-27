@@ -2,7 +2,7 @@
 ###### (there is a little bug with mongodb)
 ## Introduction:
 Hello, 
-I’m *Olivier* and today I’ll present you a short step by step tutorial to let mongoose insert document in a mongo database without any _id.
+I’m *Olivier* and today I’ll present you a short step by step tutorial to let mongoose insert documents in a mongo database without any _id.
 
 First of all, you should never do something like this if you’ve [a lot] less mongod (\<PRIMARY>) processes than node.js processes. 
 If you’re asking why, then I should introduce you the default structure of an ObjectId according to the [mongoDB documentation](http://docs.mongodb.org/manual/reference/object-id/):
@@ -19,7 +19,7 @@ If you’re asking why, then I should introduce you the default structure of an 
 
 
 
-So, for the same process and host, you’ll be able to create 16 777 216 (counter) unique objectId each seconds (timesteamp). Which is enough for small and medium projects. 
+So, for the same process and host, you’ll be able to create 16 777 216 (counter) unique objectId each seconds (timesteamp). Which is more than enough for small, medium and large projects. 
 
 Furthermore, the algorithm use two more fields: the *machine id* and the current *process id* that compute our primary key, those fields will lower even more the risk of collisions between _ids. 
 
@@ -31,7 +31,7 @@ So, because your application are more prone to have more node.js processes than 
 
 However, if you’re still reading this tutorial, maybe you really want to force your database to create _ids. If, it’s the case, let me introduce you to the joy of changing the behavior of libraries.
 
-## Step 1.1: changing the moon’
+## Step 1.1: changing the mon’
 Logically, you already have installed mongoose with *npm* or any other procedure. 
 
 First, you need to set the **forceServerObjectId** property to true. 
@@ -41,7 +41,7 @@ To do so, you need to edit in *node_module* the file **/mongoose/lib/drivers/nod
 and set **o.db.forceServerObjectId** to **true**
 
 > - "Can I use {_id:false} in my Schema now ?" 
-> - "Not, yet…"
+> - "Not, yet… you need to remove some stuff"
 
 ## step 1.2:changing the  ‘goose
 
@@ -57,7 +57,7 @@ if (!utils.object.hasOwnProperty(obj || {}, '_id')) {
 }
 ```
 
-now, mongoose will never return an error if you don’t insert an _id before sending the doc to the database.
+now, mongoose will never return an error if you don’t insert an _id before sending the doc to the database. (Usually by setting {_id:false} )
 
 > - "YES! Now I can send _id less objects!!!"
 > - "Sadly, not yet."
@@ -65,7 +65,7 @@ now, mongoose will never return an error if you don’t insert an _id before sen
 
 ## Step 2. Debug mongoDB
 
-Sadly, the **node-mongodb-native** driver doesn’t really support *forceServeObjectId*… (Even in its latest version 2.0.42) I published an [issue ticket about this little problem](https://jira.mongodb.org/browse/NODE-543)
+Yes *Sadly*, the current **node-mongodb-native** driver (v2.0.42) doesn’t really support *forceServeObjectId*… I published an [issue ticket about this little problem](https://jira.mongodb.org/browse/NODE-543)
 
 So you'll need to **deal with it** manually!
 
@@ -81,7 +81,7 @@ You’ll need to edit the following files in **mongoose/node_module/mongodb/lib/
 
 you can help yourself with the [issue ticket](https://jira.mongodb.org/browse/NODE-543) to find the correct line number.
 
-####In *collection.js*:
+####In *collection.js* file:
 #####In **insertMany** function:
 modify the condition as follows
 ```js
@@ -104,9 +104,9 @@ if( self.s.db.options.forceServerObjectId!==true) {
 }
 ```
 
-### Step 2.2 BULK! SMACH!
+### Step 2.2 BULK! SMASH!
 
-Every time you see this line in **bulk/ordered.js** and **bulk/unordered.js** (or find any new ObjectId() call): 
+Every time you see this line in **bulk/ordered.js** and **bulk/unordered.js** : 
 ```js
 if(document._id == null) document._id = new ObjectID();
 ```
@@ -116,7 +116,7 @@ if( this.s.collection.s.db.options.forceServerObjectId!==true &&  document._id =
 ```
 
 
-And, you can FINALLY store documents without _id with mongoose by using the parameter **{_id:false}** when you design your schema ! But like I said earlier, you shouldn't ;)
+And, you can FINALLY store documents without _id with mongoose by using the parameter **{_id:false}** when you design your schema! But, like I said earlier, you shouldn't do it if you don't know how your application will evolve ;)
 
 
 
