@@ -20,26 +20,31 @@ If you’re asking why, then I should introduce you the default structure of an 
 
 
 So, for the same process and host, you’ll be able to create 16 777 216 (counter) unique objectId each seconds (timesteamp). Which is enough for small and medium projects. 
-Furthermore, the algorithm use two more fields: the machine id and the current process id of the server that compute our primary key which lower the risk of collisions. 
-So like uuid, your application is unlikely to generate two similar ObjectIds at the same time. The only condition where a collision might occur is when two different machines with the same “machine identifier” are creating an ObjectId at the same time with the same process id and counter value. In conclusion, ObjectId are quite safe on very [very] large application.
 
-Therefore, because application are more prone to have more node.js processes than database processes, we can understand why mongoose disable the forceServerObjectId parameter by default.
+Furthermore, the algorithm use two more fields: the *machine id* and the current *process id* that compute our primary key, those fields will lower even more the risk of collisions between _ids. 
+
+Therefore, like *uuid*, your application is unlikely to generate two similar ObjectIds at the same time. The only condition where a collision might occur is when two different machines with the same “machine identifier” are creating an ObjectId at the same time, with the same process id and counter value. 
+
+In conclusion, ObjectId are quite safe on very [very] large application.
+
+So, because your application are more prone to have more node.js processes than DB processes, we can understand why mongoose disable the **forceServerObjectId** parameter by default.
 
 However, if you’re still reading this tutorial, maybe you really want to force your database to create _ids. If, it’s the case, let me introduce you to the joy of changing the behavior of libraries.
 
-## Step 1.1: changing the mon’
-Logically, you already have installed mongoose with npm or any other procedure. 
+## Step 1.1: changing the moon’
+Logically, you already have installed mongoose with *npm* or any other procedure. 
 
-First, you need to set the forceServerObjectId property to true. 
+First, you need to set the **forceServerObjectId** property to true. 
 
-To do so, you need to edit in node_module the file **/mongoose/lib/drivers/node-module-native/coonection.js** 
+To do so, you need to edit in *node_module* the file **/mongoose/lib/drivers/node-module-native/coonection.js** 
 
 and set **o.db.forceServerObjectId** to **true**
 
-> - "Can I use {_id:false} now ?" 
+> - "Can I use {_id:false} in my Schema now ?" 
 > - "Not, yet…"
 
 ## step 1.2:changing the  ‘goose
+
 Now, we need to change all save/create queries to avoid the default creation of _ids.
 Edit the **lib/model.js** file to remove this portion of code in the **$__handleSave function**:
 
@@ -59,6 +64,7 @@ now, mongoose will never return an error if you don’t insert an _id before sen
 > - "HUH?"
 
 ## Step 2. Debug mongoDB
+
 Sadly, the **node-mongodb-native** driver doesn’t really support *forceServeObjectId*… (Even in its latest version 2.0.42) I published an [issue ticket about this little problem](https://jira.mongodb.org/browse/NODE-543)
 
 So you'll need to **deal with it** manually!
@@ -96,12 +102,13 @@ if( self.s.db.options.forceServerObjectId!==true) {
 }
 ```
 
-### Step 2.2 bulk -> ordered.js && unordered.js
-Every time you see this line: 
+### Step 2.2 BULK! SMACH!
+
+Every time you see this line in **bulk/ordered.js** and **bulk/unordered.js**: 
 ```js
 if(document._id == null) document._id = new ObjectID();
 ```
-replace it by:
+replace it with:
 ```js
 if( this.s.collection.s.db.options.forceServerObjectId!==true &&  document._id == null) document._id = new ObjectID();
 ```
