@@ -116,7 +116,7 @@ if( this.s.collection.s.db.options.forceServerObjectId!==true &&  document._id =
 ```
 
 
-And, you can FINALLY store documents without _id with mongoose by using the parameter **{_id:false}** when you design your schema !
+And, you can FINALLY store documents without _id with mongoose by using the parameter **{_id:false}** when you design your schema ! But like I said earlier, you shouldn't ;)
 
 
 
