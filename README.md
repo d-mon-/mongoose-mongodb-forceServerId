@@ -1,5 +1,6 @@
 # Let mongoose support forceServerObjectId 
 ###### (and the little bug in the driver)
+**Author:** *Guérin Olivier*
 no source in this repo
 ## Introduction:
 Hello, 
@@ -119,7 +120,15 @@ if( this.s.collection.s.db.options.forceServerObjectId!==true &&  document._id =
 
 And, you can FINALLY store documents without _id with mongoose by [using the parameter **{_id:false}** when you design your schema!](http://mongoosejs.com/docs/guide.html#_id) But, like I said earlier, you shouldn't do it if you don't know how your application will evolve ;)
 
+## what if I want to insert an ObjectId when {_id:false} is set
 
+Well, mongoose expose the ObjectId type. Therefore, you just need to retrieve it, and create an new object.
 
+```js
+var mongoose = require('mongoose');
+var ObjectId =  mongoose.Types.ObjectId;
+var x = new ObjectId(); //return a new ObjectId()
+```
 
-**Author:** *Guérin Olivier*
+Enjoy!
+
