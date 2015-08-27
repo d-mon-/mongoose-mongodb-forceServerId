@@ -1,5 +1,6 @@
 # Let mongoose support forceServerObjectId 
-###### (there is a little bug with mongodb)
+###### (and the little bug in the driver)
+no source in this repo
 ## Introduction:
 Hello, 
 I’m *Olivier* and today I’ll present you a short step by step tutorial to let mongoose insert documents in a mongo database without any _id.
@@ -116,7 +117,7 @@ if( this.s.collection.s.db.options.forceServerObjectId!==true &&  document._id =
 ```
 
 
-And, you can FINALLY store documents without _id with mongoose by using the parameter **{_id:false}** when you design your schema! But, like I said earlier, you shouldn't do it if you don't know how your application will evolve ;)
+And, you can FINALLY store documents without _id with mongoose by [using the parameter **{_id:false}** when you design your schema!](http://mongoosejs.com/docs/guide.html#_id) But, like I said earlier, you shouldn't do it if you don't know how your application will evolve ;)
 
 
 
