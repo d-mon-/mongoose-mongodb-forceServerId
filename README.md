@@ -118,7 +118,9 @@ if( this.s.collection.s.db.options.forceServerObjectId!==true &&  document._id =
 ```
 
 
-And, you can FINALLY store documents without _id with mongoose by [using the parameter **{_id:false}** when you design your schema!](http://mongoosejs.com/docs/guide.html#_id) But, like I said earlier, you shouldn't do it if you don't know how your application will evolve ;)
+And, you can FINALLY store documents without _id with mongoose by [using the parameter **{_id:false}** when you design your schema!](http://mongoosejs.com/docs/guide.html#_id) But, like I said earlier, you shouldn't do it if you don't know how your application will evolve. 
+
+In conclusion, {_id:false} should be use only when you deal with embedded documents/model in mongoose.
 
 ## what if I want to insert an ObjectId when {_id:false} is set
 
@@ -130,5 +132,5 @@ var ObjectId =  mongoose.Types.ObjectId;
 var x = new ObjectId(); //return a new ObjectId()
 ```
 
-Enjoy!
+Enjoy! ;)
 
